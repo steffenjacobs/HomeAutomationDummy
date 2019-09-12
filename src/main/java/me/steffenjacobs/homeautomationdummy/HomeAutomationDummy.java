@@ -75,7 +75,7 @@ public class HomeAutomationDummy implements MqttCallback {
 		client.subscribe(topic);
 	}
 
-	private void fake(MqttClient client, String topic, double lowerLimit, double upperLimit, double avgStepSize, double deriviation) throws MqttException {
+	private void fake(MqttClient client, String topic, double lowerLimit, double upperLimit, double avgStepSize, double deviation) throws MqttException {
 		concurrentCache.put(topic, new AtomicReference<ValueWithDirection<?>>(
 				new ValueWithDirection<Double>(Math.random() > .5, ((Math.random() * avgStepSize) / avgStepSize) * (lowerLimit + upperLimit) / 2.0)));
 		scheduler.scheduleAtFixedRate(() -> {
@@ -93,9 +93,9 @@ public class HomeAutomationDummy implements MqttCallback {
 			double nextValue;
 
 			if (direction) {
-				nextValue = lastValue + deriviation - Math.random() * deriviation * 2 + avgStepSize;
+				nextValue = lastValue + deviation - Math.random() * deviation * 2 + avgStepSize;
 			} else {
-				nextValue = lastValue - deriviation + Math.random() * deriviation * 2 - avgStepSize;
+				nextValue = lastValue - deviation + Math.random() * deviation * 2 - avgStepSize;
 			}
 			try {
 				MqttMessage msg = new MqttMessage();
